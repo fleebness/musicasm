@@ -15,11 +15,12 @@
 #include "scale.hpp"
 #include "tone_player.hpp"
 
-// #define PLAY_MAJOR
+#define PLAY_MAJOR
 #define PLAY_MINOR
-// #define PLAY_DORIAN
+#define PLAY_DORIAN
 
-void play_note(tvr::pa::tone_player::wave_ptr voice, std::size_t i, tvr::pa::western::concert_scale& scale)
+template< typename scale >
+void play_note(tvr::pa::tone_player::wave_ptr voice, int i, scale& scale)
 {
 	voice->set_freq(scale.get_note(i));
 	std::cout << (i + 1) << std::endl;
@@ -46,18 +47,22 @@ int main()
 		western::concert_scale scale(static_cast<std::size_t>(49));
 		western::concert_scale minor_scale(static_cast<std::size_t>(49), western::aeolian_mode);
 		western::concert_scale dorian_scale(static_cast<std::size_t>(49), western::dorian_mode);
+		western::scale_432 alternate(static_cast<std::size_t>(49));
+		western::scale_432 alternate_minor(static_cast<std::size_t>(49), western::aeolian_mode);
+		western::scale_432 alternate_dorian(static_cast<std::size_t>(49), western::dorian_mode);
+
 		tone_player::wave_ptr voice(new sine_wave());
 
 		player.add_wave(voice);
 		player.play();
-		play_note(voice, -9, scale);
+		play_note(voice, -9, alternate);
 		::Pa_Sleep(1000);
-		play_note(voice, -1, scale);
+		play_note(voice, -1, alternate);
 		::Pa_Sleep(1000);
 #if defined PLAY_MAJOR
 		for (int i = 0; i < 8; ++i)
 		{
-			play_note(voice, i, scale);
+			play_note(voice, i, alternate);
 		}
 		for (int i = 7; i >= 0; --i)
 		{
@@ -67,7 +72,7 @@ int main()
 #if defined PLAY_MINOR
 		for (int i = 0; i < 8; ++i)
 		{
-			play_note(voice, i, minor_scale);
+			play_note(voice, i, alternate_minor);
 		}
 		for (int i = 7; i >= 0; --i)
 		{
@@ -77,7 +82,7 @@ int main()
 #if defined PLAY_DORIAN
 		for (int i = 0; i < 8; ++i)
 		{
-			play_note(voice, i, dorian_scale);
+			play_note(voice, i, alternate_dorian);
 		}
 		for (int i = 7; i >= 0; --i)
 		{

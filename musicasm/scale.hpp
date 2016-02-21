@@ -125,6 +125,7 @@ namespace tvr
 			};
 
 			typedef scale<a440_12_TET> concert_scale;
+			typedef scale<a432_12_TET> scale_432;
 		}
 	}
 }

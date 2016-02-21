@@ -106,6 +106,7 @@ namespace tvr
 		};
 
 		typedef get_temperament<440, 49, 12> a440_12_TET;
+		typedef get_temperament<432, 49, 12> a432_12_TET;
 	}
 }
 

@@ -151,7 +151,7 @@ namespace tvr
 				fn_t fn;
 				for (std::size_t i = 0; i < get_table().size(); ++i)
 				{
-					get_table()[i] = (float)fn(i, get_table().size());
+					get_table()[i] = (float)fn(static_cast<double>(i), static_cast<double>(get_table().size()));
 				}
 			}
 			static float_collection& get_table()
