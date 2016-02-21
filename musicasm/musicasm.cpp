@@ -16,8 +16,8 @@
 #include "tone_player.hpp"
 
 #define PLAY_MAJOR
-#define PLAY_MINOR
-#define PLAY_DORIAN
+// #define PLAY_MINOR
+// #define PLAY_DORIAN
 
 template< typename scale >
 void play_note(tvr::pa::tone_player::wave_ptr voice, int i, scale& scale)
