@@ -159,6 +159,7 @@
     <ClInclude Include="equal_temperament.hpp" />
     <ClInclude Include="host_api.hpp" />
     <ClInclude Include="port_audio.hpp" />
+    <ClInclude Include="rhythm.hpp" />
     <ClInclude Include="scale.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="stream.hpp" />

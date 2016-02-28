@@ -16,6 +16,9 @@
     <Filter Include="Header Files\port_audio">
       <UniqueIdentifier>{768ee7ec-f23d-4e91-9812-6519a9c36b08}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\musicasm">
+      <UniqueIdentifier>{5e3ca47b-c849-47a8-a374-fb46b0770b79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -36,20 +39,23 @@
     <ClInclude Include="port_audio.hpp">
       <Filter>Header Files\port_audio</Filter>
     </ClInclude>
-    <ClInclude Include="wave.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="equal_temperament.hpp">
+      <Filter>Header Files\musicasm</Filter>
     </ClInclude>
-    <ClInclude Include="tone_player.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="rhythm.hpp">
+      <Filter>Header Files\musicasm</Filter>
     </ClInclude>
     <ClInclude Include="scale.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\musicasm</Filter>
     </ClInclude>
     <ClInclude Include="temperament.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\musicasm</Filter>
     </ClInclude>
-    <ClInclude Include="equal_temperament.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="tone_player.hpp">
+      <Filter>Header Files\musicasm</Filter>
+    </ClInclude>
+    <ClInclude Include="wave.hpp">
+      <Filter>Header Files\musicasm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

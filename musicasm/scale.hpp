@@ -112,9 +112,9 @@ namespace tvr
 					return result;
 				}
 
-				double get_freq(std::size_t interval, std::size_t octave, bool flat = false, bool sharp = false)
+				double get_freq(int interval, int octave, bool flat = false, bool sharp = false)
 				{
-					scale_note result = get_note(interval, octave, flat, sharp);
+					double result = get_note(interval, octave, flat, sharp);
 					return result;
 				}
 
