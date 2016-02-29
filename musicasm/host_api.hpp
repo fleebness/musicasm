@@ -231,12 +231,13 @@ namespace tvr
 			};
 
 		public:
-			host_api_info()
+			host_api_info():_info(0)
 			{
-				_info = ::Pa_GetHostApiInfo(::Pa_GetDefaultHostApi());
+				_index = ::Pa_GetDefaultHostApi();
+				_info = ::Pa_GetHostApiInfo(_index);
 			}
 
-			host_api_info(PaHostApiIndex index)
+			host_api_info(PaHostApiIndex index): _index(index)
 			{
 				_info = ::Pa_GetHostApiInfo(index);
 			}
