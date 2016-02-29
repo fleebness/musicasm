@@ -20,16 +20,16 @@ namespace tvr
 			typedef std::function<void()> void_fn;
 			typedef std::vector<voice> voices;
 			typedef voice::wave_ptr wave_ptr;
-
 		public:
 			tone_player(tvr::pa::host_api_info& host, tvr::pa::device_info& device, PaStreamParameters& params) :
-				_host(host),
-				_device(device),
-				_params(params),
 				_stream(0),
+				_player(0),
+				_host(host),
+				_params(params),
+				_device(device),
+				_time_started(0.0),
 				_maxed_value(1.0),
 				_vol(1.0),
-				_time_started(0.0),
 				_playing(false)
 			{
 			}

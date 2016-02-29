@@ -77,10 +77,11 @@ namespace tvr
 		public:
 			wave() :
 				_freq(440.0),
-				_sample_rate(44100.0),
+				_next_table_amount(0),
 				_next_table_item(0),
-				_vol(1.0),
-				_phase(0.0)
+				_phase(0.0),
+				_sample_rate(44100.0),
+				_vol(1.0)
 			{
 				if (get_table().empty())
 				{

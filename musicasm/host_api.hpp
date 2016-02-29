@@ -121,8 +121,8 @@ namespace tvr
 
 			struct device_iterator : public std::iterator<std::random_access_iterator_tag, device_info, int>
 			{
-				device_iterator(const host_api_info& host): _host(host), _index(0){ check_index(); }
-				device_iterator(const host_api_info& host, int index): _host(host), _index(index){ check_index(); }
+				device_iterator(const host_api_info& host): _index(0), _host(host){ check_index(); }
+				device_iterator(const host_api_info& host, int index):_index(index), _host(host){ check_index(); }
 				~device_iterator(){}
 
 				bool operator==(const device_iterator& item) const

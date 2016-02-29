@@ -22,8 +22,8 @@ namespace tvr
 			base_note_collection _notes;
 
 			voice() :
-				_last_played(0.0),
-				_current_note(0)
+				_current_note(0),
+				_last_played(0.0)
 			{}
 
 			voice(const voice& orig)

@@ -44,12 +44,12 @@ namespace tvr
 			class note
 			{
 			public:
-				note(equal_temperament& tuning):_key(49), _tuning(tuning) {}
+				note(equal_temperament& tuning):_tuning(tuning), _key(49) {}
 				note(const note& orig): _tuning(orig._tuning)
 				{
 					*this = orig;
 				}
-				note(std::size_t key, equal_temperament& tuning): _key(key), _tuning(tuning)
+				note(std::size_t key, equal_temperament& tuning): _tuning(tuning), _key(key)
 				{}
 				~note(){}
 
@@ -73,16 +73,16 @@ namespace tvr
 			{
 			public:
 				scale(std::size_t key, const size_t(&modal_scale)[7] = ionian_mode):
-					_key(key),
+					_temper(get_temperament::get_temper()),
 					_mode(modal_scale),
-					_temper(get_temperament::get_temper())
+					_key(key)
 				{
 				}
 
 				scale(const scale& orig):
-					_key(orig._key),
+					_temper(get_temperament::get_temper()),
 					_mode(orig._mode),
-					_temper(get_temperament::get_temper())
+					_key(orig._key)
 				{
 				}
 

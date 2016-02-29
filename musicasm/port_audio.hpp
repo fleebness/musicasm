@@ -1,7 +1,7 @@
 #if !defined PORT_AUDIO_HPP
 #define PORT_AUDIO_HPP
 
-#include "../../../sdks/portaudio/include/portaudio.h"
+#include "portaudio.h"
 
 #include "device_info.hpp"
 #include "host_api.hpp"
@@ -16,15 +16,17 @@ public:
 		static port_audio_init init;
 		return init;
 	}
+	PaError get_error() { return _error; }
 private:
 	port_audio_init()
 	{
-		_error = Pa_Initialize();
+		_error = ::Pa_Initialize();
 	}
+
 
 	~port_audio_init()
 	{
-		Pa_Terminate();
+		::Pa_Terminate();
 	}
 private:
 	PaError _error;
