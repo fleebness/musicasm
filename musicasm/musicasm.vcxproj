@@ -155,17 +155,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="base_note.hpp" />
     <ClInclude Include="device_info.hpp" />
     <ClInclude Include="equal_temperament.hpp" />
     <ClInclude Include="host_api.hpp" />
     <ClInclude Include="port_audio.hpp" />
-    <ClInclude Include="rhythm.hpp" />
     <ClInclude Include="scale.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="stream.hpp" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="temperament.hpp" />
     <ClInclude Include="tone_player.hpp" />
+    <ClInclude Include="voice.hpp" />
     <ClInclude Include="wave.hpp" />
   </ItemGroup>
   <ItemGroup>

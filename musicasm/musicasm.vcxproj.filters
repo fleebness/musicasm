@@ -42,9 +42,6 @@
     <ClInclude Include="equal_temperament.hpp">
       <Filter>Header Files\musicasm</Filter>
     </ClInclude>
-    <ClInclude Include="rhythm.hpp">
-      <Filter>Header Files\musicasm</Filter>
-    </ClInclude>
     <ClInclude Include="scale.hpp">
       <Filter>Header Files\musicasm</Filter>
     </ClInclude>
@@ -55,6 +52,12 @@
       <Filter>Header Files\musicasm</Filter>
     </ClInclude>
     <ClInclude Include="wave.hpp">
+      <Filter>Header Files\musicasm</Filter>
+    </ClInclude>
+    <ClInclude Include="base_note.hpp">
+      <Filter>Header Files\musicasm</Filter>
+    </ClInclude>
+    <ClInclude Include="voice.hpp">
       <Filter>Header Files\musicasm</Filter>
     </ClInclude>
   </ItemGroup>
