@@ -1,10 +1,6 @@
 // PortAudioSine.cpp : Defines the entry point for the console application.
 //
 
-#if defined _MSC_VER
-#include "stdafx.h"
-#endif
-
 #include <cmath>
 #include <iomanip>
 #include <iostream>
