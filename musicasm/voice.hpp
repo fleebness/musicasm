@@ -11,26 +11,38 @@ namespace tvr
 {
 	namespace pa
 	{
+		/**
+		 * A sequence of base_notes that should play, one after another.
+		 **/
 		struct voice
 		{
+			/// The type of collection for base notes.
 			typedef std::vector<base_note> base_note_collection;
+			/// A convenience type for pointers to _waves.
 			typedef std::shared_ptr<_wave> wave_ptr;
 
+			/// The current note played within _notes.
 			base_note_collection::size_type _current_note;
+			/// The time the current note started playing.
 			PaTime _last_played;
+			/// The timbre of the note.
 			wave_ptr _tone;
+			/// The collection of notes to play in this voice.
 			base_note_collection _notes;
-
+			
+			/// Default constructor.
 			voice() :
 				_current_note(0),
 				_last_played(0.0)
 			{}
 
+			/// Copy constructor
 			voice(const voice& orig)
 			{
 				*this = orig;
 			}
 
+			/// Copy assignment operator.
 			voice& operator=(const voice& orig)
 			{
 				if (this != &orig)
@@ -42,13 +54,15 @@ namespace tvr
 				}
 				return *this;
 			}
-
+			
+			/// Assignment operator to a collection of base notes.
 			voice& operator=(const base_note_collection& notes)
 			{
 				_notes = notes;
 				return *this;
 			}
 
+			/// Sets how long into the current play time has run.
 			void set_time(PaTime current_time)
 			{
 				if (_current_note < _notes.size())
@@ -65,6 +79,7 @@ namespace tvr
 				}
 			}
 
+			/// Returns true when we have run out of notes.
 			bool is_dead() const
 			{
 				return !(_current_note < _notes.size());

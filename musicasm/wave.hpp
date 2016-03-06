@@ -10,6 +10,7 @@ namespace tvr
 	{
 		const double _pi = std::acos(-1);
 
+		/// Provides SINE wave values.
 		struct sine_value
 		{
 			double operator()(double i, double table_size)
@@ -20,22 +21,23 @@ namespace tvr
 			}
 		};
 
+		/// Provides a sawtooth wave.
 		struct sawtooth_value
 		{
 			double operator()(double i, double table_size)
 			{
 				double result = 0.0;
-				result = i / table_size;
-				return result;
-			}
-		};
-
-		struct rev_sawtooth_value
-		{
-			double operator()(double i, double table_size)
-			{
-				double result = 0.0;
-				result = (table_size - i) / table_size;
+				double half = table_size / 2;
+				if ( i < half)
+				{
+					result = ((i * 2) / half) - 1;
+				}
+				else
+				{
+					double test = i - half;
+					test = half - test;
+					result = ((test * 2) / half) - 1;
+				}
 				return result;
 			}
 		};
@@ -46,13 +48,13 @@ namespace tvr
 			{
 				double result = 0.0;
 				result = std::sin(i / table_size * _pi * 2.0);
-				if (result > 0.5)
+				if (result > 0.0)
 				{
 					result = 1.0;
 				}
 				else
 				{
-					result = 0.0;
+					result = -1.0;
 				}
 				return result;
 			}
@@ -184,7 +186,6 @@ namespace tvr
 
 		typedef wave<500, sine_value> sine_wave;
 		typedef wave<500, sawtooth_value> sawtooth_wave;
-		typedef wave<500, rev_sawtooth_value> rev_sawtooth_wave;
 		typedef wave<500, pulse_value> pulse_wave;
 	}
 }

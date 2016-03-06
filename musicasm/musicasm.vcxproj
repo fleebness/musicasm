@@ -155,7 +155,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="adsr.hpp" />
     <ClInclude Include="base_note.hpp" />
+    <ClInclude Include="console_wait.hpp" />
     <ClInclude Include="device_info.hpp" />
     <ClInclude Include="equal_temperament.hpp" />
     <ClInclude Include="host_api.hpp" />

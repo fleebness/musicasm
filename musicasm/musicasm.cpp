@@ -9,13 +9,11 @@
 #include <string>
 #include <vector>
 
+#include "adsr.hpp"
+#include "console_wait.hpp"
 #include "port_audio.hpp"
 #include "scale.hpp"
 #include "tone_player.hpp"
-
-// #define PLAY_MAJOR
-// #define PLAY_MINOR
-// #define PLAY_DORIAN
 
 bool finished = false;
 
@@ -50,35 +48,70 @@ int main()
 			western::scale_432 scale(static_cast<std::size_t>(49));
 			// western::scale_432 scale(static_cast<std::size_t>(49), western::aeolian_mode);
 			// western::scale_432 scale(static_cast<std::size_t>(49), western::dorian_mode);
+			tvr::pa::adsr env;
+			tvr::pa::adsr::v_point point;
+			point._begin = 0;
+			point._duration = 0.05;
+			point._end = 1.0;
+			env.set_attack(point);
+			point._duration = 0.03;
+			point._end = 0.75;
+			env.set_decay(point);
+			point._duration = 0;
+			point._end = 0.75;
+			env.set_sustain(point);
+			point._duration = 0.04;
+			point._end = 0.0;
+			env.set_release(point);
 
 			tvr::pa::voice voice1;
-			voice1._tone.reset(new sine_wave());
+			// voice1._tone.reset(new sine_wave());
+			voice1._tone.reset(new sawtooth_wave());
+			// voice1._tone.reset(new pulse_wave());
 			tvr::pa::voice voice2;
-			voice2._tone.reset(new sine_wave());
+			// voice2._tone.reset(new sine_wave());
+			voice2._tone.reset(new sawtooth_wave());
+			// voice2._tone.reset(new pulse_wave());
 			tvr::pa::voice voice3;
-			voice3._tone.reset(new sine_wave());
+			// voice3._tone.reset(new sine_wave());
+			voice3._tone.reset(new sawtooth_wave());
+			// voice3._tone.reset(new pulse_wave());
 
-			double vol = 1.0;
+			double vol = 0.75;
 			double dur = 0.5;
 			for (int i = 0; i < 8; ++i)
 			{
 				voice1._notes.push_back(base_note(scale.get_freq(i, 0), vol, dur));
 				voice2._notes.push_back(base_note(scale.get_freq(i + 2, 0), vol, dur));
-				voice3._notes.push_back(base_note(scale.get_freq(i + 4, 0), dur, dur));
+				voice3._notes.push_back(base_note(scale.get_freq(i + 4, 0), vol, dur));
+				// env(voice1._notes, scale.get_freq(i, 0), vol, dur);
+				// env(voice2._notes, scale.get_freq(i + 2, 0), vol, dur);
+				// env(voice3._notes, scale.get_freq(i + 4, 0), vol, dur);
 			}
+			vol = 1.0;
 			for (int i = 7; i > 0; --i)
 			{
+				/*
 				voice1._notes.push_back(base_note(scale.get_freq(i, 0), vol, dur));
 				voice2._notes.push_back(base_note(scale.get_freq(i + 2, 0), vol, dur));
-				voice3._notes.push_back(base_note(scale.get_freq(i + 4, 0), dur, dur));
+				voice3._notes.push_back(base_note(scale.get_freq(i + 4, 0), vol, dur));
+				*/
+				env(voice1._notes, scale.get_freq(i, 0), vol, dur);
+				env(voice2._notes, scale.get_freq(i + 2, 0), vol, dur);
+				env(voice3._notes, scale.get_freq(i + 4, 0), vol, dur);
 			}
 			if (true)
 			{
 				int i = 0;
 				dur = 0.75;
+				/*
 				voice1._notes.push_back(base_note(scale.get_freq(i, 0), vol, dur));
 				voice2._notes.push_back(base_note(scale.get_freq(i + 2, 0), vol, dur));
-				voice3._notes.push_back(base_note(scale.get_freq(i + 4, 0), dur, dur));
+				voice3._notes.push_back(base_note(scale.get_freq(i + 4, 0), vol, dur));
+				*/
+				env(voice1._notes, scale.get_freq(i, 0), vol, dur);
+				env(voice2._notes, scale.get_freq(i + 2, 0), vol, dur);
+				env(voice3._notes, scale.get_freq(i + 4, 0), vol, dur);
 			}
 
 			player.add_voice(voice1);
@@ -86,10 +119,20 @@ int main()
 			player.add_voice(voice3);
 
 			player.set_finished_fn(&set_finished);
+
 			player.play();
+			std::cout << "Tap 'Q' to end." << std::endl;
 			while (!finished)
 			{
 				::Pa_Sleep(100);
+				if (_kbhit())
+				{
+					int ch = _getch();
+					if (ch == 'q' || ch == 'Q')
+					{
+						finished = true;
+					}
+				}
 			}
 		}
 		else

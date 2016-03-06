@@ -19,6 +19,9 @@
     <Filter Include="Header Files\musicasm">
       <UniqueIdentifier>{5e3ca47b-c849-47a8-a374-fb46b0770b79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\misc">
+      <UniqueIdentifier>{349d063c-e101-4fc2-b71f-4352f625f3c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="host_api.hpp">
@@ -53,6 +56,12 @@
     </ClInclude>
     <ClInclude Include="voice.hpp">
       <Filter>Header Files\musicasm</Filter>
+    </ClInclude>
+    <ClInclude Include="adsr.hpp">
+      <Filter>Header Files\musicasm</Filter>
+    </ClInclude>
+    <ClInclude Include="console_wait.hpp">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
