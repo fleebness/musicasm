@@ -16,5 +16,10 @@ Windows:
 
 Linux:
 
- --- coming
+My reference build machine is an Ubuntu-14 Desktop.  As I have relatively little
+experience building for unix systems, any guidance would be appreciated.
+
+* 'make' builds 'musicasm'.
+* 'make clean' removes musicasm.
+* There are, as of yet, no object files.  Most of the work is done in header libraries.
 
