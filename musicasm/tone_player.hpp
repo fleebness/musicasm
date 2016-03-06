@@ -130,6 +130,8 @@ namespace tvr
 					_time_started = time->currentTime;
 				}
 				PaTime now = time->currentTime - _time_started;
+				PaTime adj = 1 / _device.get_info()->defaultSampleRate;
+				PaTime proj_time = now;
 				std::size_t dead_voice_count = 0;
 				for (unsigned long c = 0; c < frame; ++c)
 				{
@@ -138,7 +140,7 @@ namespace tvr
 					{
 						if (!_voices[i].is_dead())
 						{
-							_voices[i].set_time(now);
+							_voices[i].set_time(proj_time);
 							if (_voices[i]._tone.get() != 0)
 							{
 								value += _voices[i]._tone->get_next_value();
@@ -149,6 +151,8 @@ namespace tvr
 							++dead_voice_count;
 						}
 					}
+
+					proj_time += adj;
 
 					if (dead_voice_count == _voices.size())
 					{
