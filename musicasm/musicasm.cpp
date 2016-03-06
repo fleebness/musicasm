@@ -77,25 +77,17 @@ int main()
 			voice3._tone.reset(new sawtooth_wave());
 			// voice3._tone.reset(new pulse_wave());
 
-			double vol = 0.75;
+			double vol = 0.15;
 			double dur = 0.5;
 			for (int i = 0; i < 8; ++i)
 			{
-				voice1._notes.push_back(base_note(scale.get_freq(i, 0), vol, dur));
-				voice2._notes.push_back(base_note(scale.get_freq(i + 2, 0), vol, dur));
-				voice3._notes.push_back(base_note(scale.get_freq(i + 4, 0), vol, dur));
-				// env(voice1._notes, scale.get_freq(i, 0), vol, dur);
-				// env(voice2._notes, scale.get_freq(i + 2, 0), vol, dur);
-				// env(voice3._notes, scale.get_freq(i + 4, 0), vol, dur);
+				env(voice1._notes, scale.get_freq(i, 0), vol, dur);
+				env(voice2._notes, scale.get_freq(i + 2, 0), vol, dur);
+				env(voice3._notes, scale.get_freq(i + 4, 0), vol, dur);
 			}
-			vol = 1.0;
+			vol = 0.75;
 			for (int i = 7; i > 0; --i)
 			{
-				/*
-				voice1._notes.push_back(base_note(scale.get_freq(i, 0), vol, dur));
-				voice2._notes.push_back(base_note(scale.get_freq(i + 2, 0), vol, dur));
-				voice3._notes.push_back(base_note(scale.get_freq(i + 4, 0), vol, dur));
-				*/
 				env(voice1._notes, scale.get_freq(i, 0), vol, dur);
 				env(voice2._notes, scale.get_freq(i + 2, 0), vol, dur);
 				env(voice3._notes, scale.get_freq(i + 4, 0), vol, dur);
@@ -104,11 +96,6 @@ int main()
 			{
 				int i = 0;
 				dur = 0.75;
-				/*
-				voice1._notes.push_back(base_note(scale.get_freq(i, 0), vol, dur));
-				voice2._notes.push_back(base_note(scale.get_freq(i + 2, 0), vol, dur));
-				voice3._notes.push_back(base_note(scale.get_freq(i + 4, 0), vol, dur));
-				*/
 				env(voice1._notes, scale.get_freq(i, 0), vol, dur);
 				env(voice2._notes, scale.get_freq(i + 2, 0), vol, dur);
 				env(voice3._notes, scale.get_freq(i + 4, 0), vol, dur);

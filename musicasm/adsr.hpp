@@ -158,47 +158,40 @@ namespace tvr
 					if (attack._duration > 0)
 					{
 						calculate_count_and_amount(count, amount, attack, _attack, current_vol);
-						for (double i = 0.0; i < attack._duration; i += count)
-						{
-							current_vol += amount;
-							results.push_back(base_note(freq, current_vol, count));
-						}
+						apply_point(results, attack, _attack, count, amount, freq, vol, current_vol);
 					}
 
 					if (decay._duration > 0)
 					{
 						calculate_count_and_amount(count, amount, decay, _decay, current_vol);
-						for (double i = 0.0; i < decay._duration; i += count)
-						{
-							current_vol += amount;
-							results.push_back(base_note(freq, current_vol, count));
-						}
+						apply_point(results, decay, _decay, count, amount, freq, vol, current_vol);
 					}
 
 					if (sustain._duration > 0)
 					{
 						calculate_count_and_amount(count, amount, sustain, _sustain, current_vol);
-						for (double i = 0.0; i < sustain._duration; i += count)
-						{
-							current_vol += amount;
-							results.push_back(base_note(freq, current_vol, count));
-						}
+						apply_point(results, sustain, _sustain, count, amount, freq, vol, current_vol);
 					}
 
 					if (release._duration > 0)
 					{
 						release._end = 0;
 						calculate_count_and_amount(count, amount, release, release, current_vol);
-						for (double i = 0.0; i < release._duration; i += count)
-						{
-							current_vol += amount;
-							results.push_back(base_note(freq, current_vol, count));
-						}
+						apply_point(results, release, release, count, amount, freq, vol, current_vol);
 					}
 				}
 			}
 
 		private:
+			static void apply_point(notes_t& results, const v_point& calculated, const v_point& original, double count, double amount, double freq, double vol, double& current_vol)
+			{
+				for (double i = 0.0; i < calculated._duration; i += count)
+				{
+					current_vol += amount;
+					results.push_back(base_note(freq, current_vol * vol, count));
+				}
+			}
+
 			static void calculate_count_and_amount(double& count, double& amount, const v_point& item, const v_point& original, double current_vol)
 			{
 				count = 0;
