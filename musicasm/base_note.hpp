@@ -5,7 +5,7 @@
 
 namespace tvr
 {
-	namespace pa
+	namespace ma
 	{
 		struct base_note
 		{

@@ -5,19 +5,20 @@
 #include <cmath>
 #include <map>
 
+#include "frequency.hpp"
 #include "wave.hpp"
 #include "temperament.hpp"
 
 namespace tvr
 {
-	namespace pa
+	namespace ma
 	{
 		class equal_temperament :public _temperament
 		{
 		public:
 			typedef std::map<std::size_t, double> double_map;
 		public:
-			equal_temperament(double ref_freq, std::size_t ref_num, std::size_t division) :
+			equal_temperament(frequency ref_freq, std::size_t ref_num, std::size_t division) :
 				_ref_freq(ref_freq),
 				_ref_num(ref_num),
 				_division(division)
@@ -43,9 +44,9 @@ namespace tvr
 				return *this;
 			}
 
-			virtual double get_freq(std::size_t number)
+			virtual frequency get_freq(std::size_t number)
 			{
-				double result = 0.0;
+				frequency result = 0.0;
 				if (static_cast<double>(number) == _ref_num)
 				{
 					result = _ref_freq;
@@ -62,7 +63,7 @@ namespace tvr
 				}
 				return result;
 			}
-			virtual double get_ref_freq() const
+			virtual frequency get_ref_freq() const
 			{
 				return _ref_freq;
 			}
@@ -77,15 +78,15 @@ namespace tvr
 		private:
 			equal_temperament();
 		private:
-			double _get_freq(double number)
+			frequency _get_freq(double number)
 			{
-				double result = 0.0;
-				result = std::exp2((number - static_cast<double>(_ref_num)) / static_cast<double>(_division)) * _ref_freq;
+				frequency result = 0.0;
+				result = std::exp2((number - static_cast<double>(_ref_num)) / static_cast<double>(_division)) * _ref_freq._value;
 				return result;
 			}
 
 		private:
-			const double _ref_freq;
+			const frequency _ref_freq;
 			const std::size_t _ref_num;
 			const std::size_t _division;
 			double_map _scale;

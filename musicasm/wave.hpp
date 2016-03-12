@@ -4,9 +4,12 @@
 #include <cmath>
 #include <functional>
 
+#include "amplitude.hpp"
+#include "frequency.hpp"
+
 namespace tvr
 {
-	namespace pa
+	namespace ma
 	{
 		const double _pi = std::acos(-1);
 
@@ -64,8 +67,8 @@ namespace tvr
 		{
 		public:
 			virtual void set_sample_rate(double sample_rate) = 0;
-			virtual void set_freq(double freq) = 0;
-			virtual void set_vol(double vol) = 0;
+			virtual void set_freq(frequency freq) = 0;
+			virtual void set_vol(amplitude vol) = 0;
 			virtual void set_phase(double phase) = 0;
 			virtual float get_next_value() = 0;
 		};
@@ -120,13 +123,13 @@ namespace tvr
 				_set_freq();
 			}
 
-			virtual void set_freq(double freq)
+			virtual void set_freq(frequency freq)
 			{
 				_freq = freq;
 				_set_freq();
 			}
 
-			virtual void set_vol(double vol)
+			virtual void set_vol(amplitude vol)
 			{
 				_vol = limit(vol);
 			}
@@ -139,7 +142,7 @@ namespace tvr
 			virtual float get_next_value()
 			{
 				std::size_t pick = static_cast<std::size_t>(_next_table_item + (_phase * get_table().size())) % get_table().size();
-				float result = get_table()[pick] * static_cast<float>(_vol);
+				float result = get_table()[pick] * static_cast<float>(_vol._value);
 				_next_table_item += _next_table_amount;
 				pick = static_cast<std::size_t>(_next_table_item) % get_table().size();
 				return result;
@@ -147,7 +150,7 @@ namespace tvr
 		private:
 			void _set_freq()
 			{
-				_next_table_amount = (get_table().size() * _freq) / _sample_rate;
+				_next_table_amount = (get_table().size() * _freq._value) / _sample_rate;
 			}
 			static void fill_table()
 			{
@@ -176,12 +179,12 @@ namespace tvr
 				return result;
 			}
 		private:
-			double _freq;
+			frequency _freq;
 			double _next_table_amount;
 			double _next_table_item;
 			double _phase;
 			double _sample_rate;
-			double _vol;
+			amplitude _vol;
 		};
 
 		typedef wave<500, sine_value> sine_wave;

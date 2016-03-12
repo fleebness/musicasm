@@ -18,8 +18,8 @@ namespace tvr
 		{
 		public:
 			typedef std::function<void()> void_fn;
-			typedef std::vector<voice> voices;
-			typedef voice::wave_ptr wave_ptr;
+			typedef std::vector<ma::voice> voices;
+			typedef ma::voice::wave_ptr wave_ptr;
 		public:
 			tone_player(tvr::pa::host_api_info& host, tvr::pa::device_info& device, PaStreamParameters& params) :
 				_stream(0),
@@ -76,11 +76,11 @@ namespace tvr
 
 			void add_wave(wave_ptr wave)
 			{
-				_voices.push_back(voice());
+				_voices.push_back(ma::voice());
 				_voices[_voices.size() - 1]._tone = wave;
 			}
 
-			void add_voice(voice voice_)
+			void add_voice(ma::voice voice_)
 			{
 				_voices.push_back(voice_);
 			}

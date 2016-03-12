@@ -25,6 +25,7 @@ void set_finished()
 int main()
 {
 	using namespace tvr::pa;
+	using namespace tvr::ma;
 
 	{
 		port_audio_init& init = port_audio_init::get_port_audio_init();
@@ -48,57 +49,56 @@ int main()
 			western::scale_432 scale(static_cast<std::size_t>(49));
 			// western::scale_432 scale(static_cast<std::size_t>(49), western::aeolian_mode);
 			// western::scale_432 scale(static_cast<std::size_t>(49), western::dorian_mode);
-			tvr::pa::adsr env;
-			tvr::pa::adsr::v_point point;
-			point._begin = 0;
+			adsr env;
+			adsr::v_point point;
 			point._duration = 0.05;
-			point._end = 1.0;
+			point._target = 1.0;
 			env.set_attack(point);
 			point._duration = 0.03;
-			point._end = 0.75;
+			point._target = 0.75;
 			env.set_decay(point);
 			point._duration = 0;
-			point._end = 0.75;
+			point._target = 0.75;
 			env.set_sustain(point);
 			point._duration = 0.04;
-			point._end = 0.0;
+			point._target = 0.0;
 			env.set_release(point);
 
-			tvr::pa::voice voice1;
+			voice voice1;
 			// voice1._tone.reset(new sine_wave());
 			voice1._tone.reset(new sawtooth_wave());
 			// voice1._tone.reset(new pulse_wave());
-			tvr::pa::voice voice2;
+			voice voice2;
 			// voice2._tone.reset(new sine_wave());
 			voice2._tone.reset(new sawtooth_wave());
 			// voice2._tone.reset(new pulse_wave());
-			tvr::pa::voice voice3;
+			voice voice3;
 			// voice3._tone.reset(new sine_wave());
 			voice3._tone.reset(new sawtooth_wave());
 			// voice3._tone.reset(new pulse_wave());
 
-			double vol = 0.15;
+			amplitude vol = 0.15;
 			double dur = 0.5;
 			for (int i = 0; i < 8; ++i)
 			{
-				env(voice1._notes, scale.get_freq(i, 0), vol, dur);
-				env(voice2._notes, scale.get_freq(i + 2, 0), vol, dur);
-				env(voice3._notes, scale.get_freq(i + 4, 0), vol, dur);
+				env(voice1, scale.get_freq(i, 0), vol, dur);
+				env(voice2, scale.get_freq(i + 2, 0), vol, dur);
+				env(voice3, scale.get_freq(i + 4, 0), vol, dur);
 			}
 			vol = 0.75;
 			for (int i = 7; i > 0; --i)
 			{
-				env(voice1._notes, scale.get_freq(i, 0), vol, dur);
-				env(voice2._notes, scale.get_freq(i + 2, 0), vol, dur);
-				env(voice3._notes, scale.get_freq(i + 4, 0), vol, dur);
+				env(voice1, scale.get_freq(i, 0), vol, dur);
+				env(voice2, scale.get_freq(i + 2, 0), vol, dur);
+				env(voice3, scale.get_freq(i + 4, 0), vol, dur);
 			}
 			if (true)
 			{
 				int i = 0;
 				dur = 0.75;
-				env(voice1._notes, scale.get_freq(i, 0), vol, dur);
-				env(voice2._notes, scale.get_freq(i + 2, 0), vol, dur);
-				env(voice3._notes, scale.get_freq(i + 4, 0), vol, dur);
+				env(voice1, scale.get_freq(i, 0), vol, dur);
+				env(voice2, scale.get_freq(i + 2, 0), vol, dur);
+				env(voice3, scale.get_freq(i + 4, 0), vol, dur);
 			}
 
 			player.add_voice(voice1);

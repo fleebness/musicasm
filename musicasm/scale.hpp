@@ -5,7 +5,7 @@
 
 namespace tvr
 {
-	namespace pa
+	namespace ma
 	{
 		namespace western
 		{
@@ -59,7 +59,7 @@ namespace tvr
 					return *this;
 				}
 
-				operator double() const
+				operator frequency() const
 				{
 					return _tuning.get_freq(_key);
 				}
@@ -112,9 +112,9 @@ namespace tvr
 					return result;
 				}
 
-				double get_freq(int interval, int octave, bool flat = false, bool sharp = false)
+				frequency get_freq(int interval, int octave, bool flat = false, bool sharp = false)
 				{
-					double result = get_note(interval, octave, flat, sharp);
+					frequency result = get_note(interval, octave, flat, sharp);
 					return result;
 				}
 
