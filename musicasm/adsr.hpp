@@ -93,6 +93,11 @@ namespace tvr
 				calculate_min_dur();
 			}
 
+			void operator()(voice& result, const base_note& note) const
+			{
+				operator()(result, note._freq, note._vol, note._duration);
+			}
+
 			void operator()(voice& result, frequency freq, amplitude vol, double dur) const
 			{
 				// Fun stuff!

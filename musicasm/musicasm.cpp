@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "adsr.hpp"
+#include "base_note.hpp"
 #include "console_wait.hpp"
 #include "port_audio.hpp"
 #include "scale.hpp"
@@ -81,24 +82,24 @@ int main()
 			double dur = 0.5;
 			for (int i = 0; i < 8; ++i)
 			{
-				env(voice1, scale.get_freq(i, 0), vol, dur);
-				env(voice2, scale.get_freq(i + 2, 0), vol, dur);
-				env(voice3, scale.get_freq(i + 4, 0), vol, dur);
+				env(voice1, base_note(scale.get_freq(i, 0), vol, dur));
+				env(voice2, base_note(scale.get_freq(i + 2, 0), vol, dur));
+				env(voice3, base_note(scale.get_freq(i + 4, 0), vol, dur));
 			}
 			vol = 0.75;
 			for (int i = 7; i > 0; --i)
 			{
-				env(voice1, scale.get_freq(i, 0), vol, dur);
-				env(voice2, scale.get_freq(i + 2, 0), vol, dur);
-				env(voice3, scale.get_freq(i + 4, 0), vol, dur);
+				env(voice1, base_note(scale.get_freq(i, 0), vol, dur));
+				env(voice2, base_note(scale.get_freq(i + 2, 0), vol, dur));
+				env(voice3, base_note(scale.get_freq(i + 4, 0), vol, dur));
 			}
 			if (true)
 			{
 				int i = 0;
 				dur = 0.75;
-				env(voice1, scale.get_freq(i, 0), vol, dur);
-				env(voice2, scale.get_freq(i + 2, 0), vol, dur);
-				env(voice3, scale.get_freq(i + 4, 0), vol, dur);
+				env(voice1, base_note(scale.get_freq(i, 0), vol, dur));
+				env(voice2, base_note(scale.get_freq(i + 2, 0), vol, dur));
+				env(voice3, base_note(scale.get_freq(i + 4, 0), vol, dur));
 			}
 
 			player.add_voice(voice1);

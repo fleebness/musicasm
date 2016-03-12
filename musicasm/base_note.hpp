@@ -9,8 +9,8 @@ namespace tvr
 	{
 		struct base_note
 		{
-			double _freq;
-			double _vol;
+			frequency _freq;
+			amplitude _vol;
 			double _duration;
 			PaTime _last_played;
 
@@ -21,7 +21,13 @@ namespace tvr
 				_last_played(0.0)
 			{}
 
-			base_note(double freq, double vol, double duration) :
+			base_note(frequency freq, amplitude vol, double duration) :
+				_freq(freq),
+				_vol(vol),
+				_duration(duration)
+			{}
+
+			base_note(amplitude vol, frequency freq, double duration) :
 				_freq(freq),
 				_vol(vol),
 				_duration(duration)
