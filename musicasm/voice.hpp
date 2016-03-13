@@ -7,6 +7,7 @@
 
 #include "amplitude.hpp"
 #include "base_note.hpp"
+#include "duration.hpp"
 #include "frequency.hpp"
 #include "wave.hpp"
 
@@ -24,7 +25,7 @@ namespace tvr
 			struct music_elem
 			{
 				Elem _value;
-				double _duration;
+				duration _duration;
 				PaTime _last_played;
 			};
 			/// The type of music element for frequencies.
@@ -125,77 +126,77 @@ namespace tvr
 			}
 
 			/// Adds a new volume value to the list of amplitudes.
-			void add_vol(const amplitude& value, double duration)
+			void add_vol(const amplitude& value, duration dur)
 			{
 				if (_amplitudes.size() > 0 && _amplitudes.rbegin()->_value == value)
 				{
 					// Just add to the last duration.
-					_amplitudes.rbegin()->_duration += duration;
+					_amplitudes.rbegin()->_duration += dur;
 				}
 				else
 				{
 					amplitude_elem elem;
 					elem._value = value;
-					elem._duration = duration;
+					elem._duration = dur;
 					elem._last_played = 0.0;
 					_amplitudes.push_back(elem);
 				}
 			}
 
 			/// Adds a new volume value to the list of amplitudes, adding that duration to the last frequency (extending it).
-			void add_vol_and_sync(const amplitude& value, double duration)
+			void add_vol_and_sync(const amplitude& value, duration dur)
 			{
-				add_vol(value, duration);
-				extend_last_freq(duration);
+				add_vol(value, dur);
+				extend_last_freq(dur);
 			}
 
 			/// Adds a new pitch value to the list of frequencies.
-			void add_freq(const frequency& value, double duration)
+			void add_freq(const frequency& value, duration dur)
 			{
 				if (_frequencies.size() > 0 && _frequencies.rbegin()->_value == value)
 				{
 					// Just add to the last duration.
-					_frequencies.rbegin()->_duration += duration;
+					_frequencies.rbegin()->_duration += dur;
 				}
 				else
 				{
 					frequency_elem elem;
 					elem._value = value;
-					elem._duration = duration;
+					elem._duration = dur;
 					elem._last_played = 0.0;
 					_frequencies.push_back(elem);
 				}
 			}
 
 			/// Adds a new pitch value to the list of frequencies, adding that duration to the last amplitude (extending it).
-			void add_freq_and_sync(const frequency& value, double duration)
+			void add_freq_and_sync(const frequency& value, duration dur)
 			{
-				add_freq(value, duration);
-				extend_last_vol(duration);
+				add_freq(value, dur);
+				extend_last_vol(dur);
 			}
 
 			/// Adds both the volume and pitch to the lists from a base_note.
 			void add_note(const base_note& note)
 			{
-				add_vol(note._vol, note._duration);
-				add_freq(note._freq, note._duration);
+				add_vol(note._vol, note._dur);
+				add_freq(note._freq, note._dur);
 			}
 
 			/// Adds duration to the last amplitude value.
-			void extend_last_vol(double duration)
+			void extend_last_vol(duration dur)
 			{
 				if (_amplitudes.size() > 0)
 				{
-					_amplitudes.rbegin()->_duration += duration;
+					_amplitudes.rbegin()->_duration += dur;
 				}
 			}
 
 			/// Adds duration to the last frequency value.
-			void extend_last_freq(double duration)
+			void extend_last_freq(duration dur)
 			{
 				if (_frequencies.size() > 0)
 				{
-					_frequencies.rbegin()->_duration += duration;
+					_frequencies.rbegin()->_duration += dur;
 				}
 			}
 

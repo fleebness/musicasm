@@ -69,6 +69,9 @@
     <ClInclude Include="amplitude.hpp">
       <Filter>Header Files\musicasm</Filter>
     </ClInclude>
+    <ClInclude Include="duration.hpp">
+      <Filter>Header Files\musicasm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="musicasm.cpp">

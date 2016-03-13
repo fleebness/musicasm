@@ -1,6 +1,9 @@
 #if !defined BASE_NOTE_HPP
 #define BASE_NOTE_HPP
 
+#include "amplitude.hpp"
+#include "duration.hpp"
+#include "frequency.hpp"
 #include "port_audio.hpp"
 
 namespace tvr
@@ -11,26 +14,26 @@ namespace tvr
 		{
 			frequency _freq;
 			amplitude _vol;
-			double _duration;
+			duration _dur;
 			PaTime _last_played;
 
 			base_note() :
 				_freq(0.0),
 				_vol(0.0),
-				_duration(0.0),
+				_dur(0.0),
 				_last_played(0.0)
 			{}
 
-			base_note(frequency freq, amplitude vol, double duration) :
+			base_note(frequency freq, amplitude vol, duration dur) :
 				_freq(freq),
 				_vol(vol),
-				_duration(duration)
+				_dur(dur)
 			{}
 
-			base_note(amplitude vol, frequency freq, double duration) :
+			base_note(amplitude vol, frequency freq, duration dur) :
 				_freq(freq),
 				_vol(vol),
-				_duration(duration)
+				_dur(dur)
 			{}
 
 			base_note(const base_note& orig)
@@ -44,7 +47,7 @@ namespace tvr
 			{
 				_freq = orig._freq;
 				_vol = orig._vol;
-				_duration = orig._duration;
+				_dur = orig._dur;
 				_last_played = orig._last_played;
 				return *this;
 			}

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "amplitude.hpp"
+#include "duration.hpp"
 #include "frequency.hpp"
 #include "voice.hpp"
 
@@ -18,7 +19,7 @@ namespace tvr
 
 			struct v_point
 			{
-				double _duration;
+				duration _duration;
 				amplitude _target;
 				
 				v_point():
@@ -95,10 +96,10 @@ namespace tvr
 
 			void operator()(voice& result, const base_note& note) const
 			{
-				operator()(result, note._freq, note._vol, note._duration);
+				operator()(result, note._freq, note._vol, note._dur);
 			}
 
-			void operator()(voice& result, frequency freq, amplitude vol, double dur) const
+			void operator()(voice& result, frequency freq, amplitude vol, duration dur) const
 			{
 				// Fun stuff!
 				// Add base_notes to results for:
@@ -110,7 +111,7 @@ namespace tvr
 				// The trick?  All of this happens within 'dur', where anything left over is in 'sustain'.
 				// If we don't get enough time for all v_points, take time first from sustain, then decay, then attack, then release (in that order).
 				// Take time from the end of a v_point when needed.
-				if (_min_dur > 0)
+				if (_min_dur > duration::no_duration())
 				{
 					// We won't even try if _min_dur == 0.
 					// Let's calculate how much we'll actually use of each part.
@@ -121,29 +122,29 @@ namespace tvr
 					if (_min_dur > dur)
 					{
 						// We have to trim durations.
-						double leftover = _min_dur - dur;
+						duration leftover = _min_dur - dur;
 						sustain._duration = 0; // We don't have enough for minimum, ergo, can't do a sustain.
 						decay._duration -= leftover;
-						if (decay._duration < 0.0)
+						if (decay._duration < duration::no_duration())
 						{
 							leftover = decay._duration * -1.0;
-							decay._duration = 0.0;
+							decay._duration = duration::no_duration();
 						}
-						if (leftover > 0)
+						if (leftover > duration::no_duration())
 						{
 							attack._duration -= leftover;
-							if (attack._duration < 0.0)
+							if (attack._duration < duration::no_duration())
 							{
 								leftover = attack._duration * -1.0;
-								attack._duration = 0;
-								if (leftover > 0)
+								attack._duration = duration::no_duration();
+								if (leftover > duration::no_duration())
 								{
 									release._duration -= leftover;
-									if (release._duration < 0.0)
+									if (release._duration < duration::no_duration())
 									{
 										// We should never, ever, get here.
 										// If we do, we have a miscalculation somewhere.
-										release._duration = 0;
+										release._duration = duration::no_duration();
 									}
 								}
 							}
@@ -151,7 +152,7 @@ namespace tvr
 					}
 					else
 					{
-						double leftover = dur - _min_dur;
+						duration leftover = dur - _min_dur;
 						sustain._duration = leftover;
 					}
 
@@ -159,25 +160,25 @@ namespace tvr
 					amplitude current_vol = 0.0;
 					double count, amount;
 					count = amount = 0.0;
-					if (attack._duration > 0)
+					if (attack._duration > duration::no_duration())
 					{
 						calculate_count_and_amount(count, amount, attack, _attack, current_vol);
 						apply_point(result, attack, _attack, count, amount, freq, vol, current_vol);
 					}
 
-					if (decay._duration > 0)
+					if (decay._duration > duration::no_duration())
 					{
 						calculate_count_and_amount(count, amount, decay, _decay, current_vol);
 						apply_point(result, decay, _decay, count, amount, freq, vol, current_vol);
 					}
 
-					if (sustain._duration > 0)
+					if (sustain._duration > duration::no_duration())
 					{
 						calculate_count_and_amount(count, amount, sustain, _sustain, current_vol);
 						apply_point(result, sustain, _sustain, count, amount, freq, vol, current_vol);
 					}
 
-					if (release._duration > 0)
+					if (release._duration > duration::no_duration())
 					{
 						release._target._value = 0;
 						calculate_count_and_amount(count, amount, release, release, current_vol);
@@ -189,7 +190,7 @@ namespace tvr
 		private:
 			static void apply_point(voice& result, const v_point& calculated, const v_point& original, double count, double amount, frequency freq, amplitude vol, amplitude& current_vol)
 			{
-				for (double i = 0.0; i < calculated._duration; i += count)
+				for (duration i = 0.0; i < calculated._duration; i += count)
 				{
 					current_vol._value += amount;
 					result.add_note(base_note(freq, current_vol._value * vol._value, count));
@@ -201,10 +202,10 @@ namespace tvr
 				count = 0;
 				amount = 0;
 				// The smaller the total duration, the larger the jump in volume may be.
-				count = item._duration / 0.01;
+				count = item._duration._value / 0.01;
 				// Determine the amount between values.
 				amount = ((original._target._value - current_vol._value) / count);
-				count = item._duration / count;
+				count = item._duration._value / count;
 			}
 
 			void calculate_min_dur()
@@ -219,7 +220,7 @@ namespace tvr
 			v_point _decay;
 			v_point _sustain;
 			v_point _release;
-			double _min_dur;
+			duration _min_dur;
 		};
 	}
 }
