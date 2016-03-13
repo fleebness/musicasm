@@ -5,10 +5,8 @@
 #include <memory>
 #include <vector>
 
-#include "amplitude.hpp"
+#include "_basic_value.hpp"
 #include "base_note.hpp"
-#include "duration.hpp"
-#include "frequency.hpp"
 #include "wave.hpp"
 
 namespace tvr
@@ -99,7 +97,7 @@ namespace tvr
 						// If time has advanced beyond when we started this
 						// amplitude plus its duration, we need to go to the
 						// next amplitude in our list.
-						if (_lp_amp + _amplitudes[_current_amp]._duration < current_time)
+						if (_lp_amp + _amplitudes[_current_amp]._duration._value < current_time)
 						{
 							++_current_amp;
 							change_amp(current_time);
@@ -110,7 +108,7 @@ namespace tvr
 						// If time has advanced beyond when we started this
 						// frequency plus its duration, we need to go to the
 						// next frequency in our list.
-						if (_lp_freq + _frequencies[_current_freq]._duration < current_time)
+						if (_lp_freq + _frequencies[_current_freq]._duration._value < current_time)
 						{
 							++_current_freq;
 							change_freq(current_time);

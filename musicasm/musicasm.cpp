@@ -47,9 +47,9 @@ int main()
 			// western::concert_scale scale(static_cast<std::size_t>(49));
 			// western::concert_scale scale(static_cast<std::size_t>(49), western::aeolian_mode);
 			// western::concert_scale scale(static_cast<std::size_t>(49), western::dorian_mode);
-			western::scale_432 scale(static_cast<std::size_t>(49));
+			// western::scale_432 scale(static_cast<std::size_t>(49));
 			// western::scale_432 scale(static_cast<std::size_t>(49), western::aeolian_mode);
-			// western::scale_432 scale(static_cast<std::size_t>(49), western::dorian_mode);
+			western::scale_432 scale(static_cast<std::size_t>(49), western::dorian_mode);
 			adsr env;
 			adsr::v_point point;
 			point._duration = 0.05;

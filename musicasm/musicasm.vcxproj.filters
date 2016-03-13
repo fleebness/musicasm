@@ -60,16 +60,10 @@
     <ClInclude Include="console_wait.hpp">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="frequency.hpp">
-      <Filter>Header Files\musicasm</Filter>
-    </ClInclude>
     <ClInclude Include="tone_player.hpp">
       <Filter>Header Files\port_audio</Filter>
     </ClInclude>
-    <ClInclude Include="amplitude.hpp">
-      <Filter>Header Files\musicasm</Filter>
-    </ClInclude>
-    <ClInclude Include="duration.hpp">
+    <ClInclude Include="_basic_value.hpp">
       <Filter>Header Files\musicasm</Filter>
     </ClInclude>
   </ItemGroup>

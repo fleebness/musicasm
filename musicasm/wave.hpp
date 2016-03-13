@@ -4,8 +4,7 @@
 #include <cmath>
 #include <functional>
 
-#include "amplitude.hpp"
-#include "frequency.hpp"
+#include "_basic_value.hpp"
 
 namespace tvr
 {
@@ -131,7 +130,7 @@ namespace tvr
 
 			virtual void set_vol(amplitude vol)
 			{
-				_vol = limit(vol);
+				_vol = limit(vol._value);
 			}
 
 			virtual void set_phase(double phase)

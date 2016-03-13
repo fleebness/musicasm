@@ -5,7 +5,7 @@
 #include <cmath>
 #include <map>
 
-#include "frequency.hpp"
+#include "_basic_value.hpp"
 #include "wave.hpp"
 #include "temperament.hpp"
 
@@ -16,7 +16,7 @@ namespace tvr
 		class equal_temperament :public _temperament
 		{
 		public:
-			typedef std::map<std::size_t, double> double_map;
+			typedef std::map<std::size_t, frequency> frequency_map;
 		public:
 			equal_temperament(frequency ref_freq, std::size_t ref_num, std::size_t division) :
 				_ref_freq(ref_freq),
@@ -78,10 +78,10 @@ namespace tvr
 		private:
 			equal_temperament();
 		private:
-			frequency _get_freq(double number)
+			frequency _get_freq(frequency number)
 			{
 				frequency result = 0.0;
-				result = std::exp2((number - static_cast<double>(_ref_num)) / static_cast<double>(_division)) * _ref_freq._value;
+				result = std::exp2((number._value - static_cast<double>(_ref_num)) / static_cast<double>(_division)) * _ref_freq._value;
 				return result;
 			}
 
@@ -89,7 +89,7 @@ namespace tvr
 			const frequency _ref_freq;
 			const std::size_t _ref_num;
 			const std::size_t _division;
-			double_map _scale;
+			frequency_map _scale;
 		};
 
 		template<std::size_t freq, std::size_t num, std::size_t division>

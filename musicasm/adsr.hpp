@@ -3,9 +3,7 @@
 
 #include <vector>
 
-#include "amplitude.hpp"
-#include "duration.hpp"
-#include "frequency.hpp"
+#include "_basic_value.hpp"
 #include "voice.hpp"
 
 namespace tvr
@@ -111,7 +109,7 @@ namespace tvr
 				// The trick?  All of this happens within 'dur', where anything left over is in 'sustain'.
 				// If we don't get enough time for all v_points, take time first from sustain, then decay, then attack, then release (in that order).
 				// Take time from the end of a v_point when needed.
-				if (_min_dur > duration::no_duration())
+				if (_min_dur > duration::zero())
 				{
 					// We won't even try if _min_dur == 0.
 					// Let's calculate how much we'll actually use of each part.
@@ -125,26 +123,26 @@ namespace tvr
 						duration leftover = _min_dur - dur;
 						sustain._duration = 0; // We don't have enough for minimum, ergo, can't do a sustain.
 						decay._duration -= leftover;
-						if (decay._duration < duration::no_duration())
+						if (decay._duration < duration::zero())
 						{
-							leftover = decay._duration * -1.0;
-							decay._duration = duration::no_duration();
+							leftover = decay._duration * duration::negative();
+							decay._duration = duration::zero();
 						}
-						if (leftover > duration::no_duration())
+						if (leftover > duration::zero())
 						{
 							attack._duration -= leftover;
-							if (attack._duration < duration::no_duration())
+							if (attack._duration < duration::zero())
 							{
-								leftover = attack._duration * -1.0;
-								attack._duration = duration::no_duration();
-								if (leftover > duration::no_duration())
+								leftover = attack._duration * duration::negative();
+								attack._duration = duration::zero();
+								if (leftover > duration::zero())
 								{
 									release._duration -= leftover;
-									if (release._duration < duration::no_duration())
+									if (release._duration < duration::zero())
 									{
 										// We should never, ever, get here.
 										// If we do, we have a miscalculation somewhere.
-										release._duration = duration::no_duration();
+										release._duration = duration::zero();
 									}
 								}
 							}
@@ -160,25 +158,25 @@ namespace tvr
 					amplitude current_vol = 0.0;
 					double count, amount;
 					count = amount = 0.0;
-					if (attack._duration > duration::no_duration())
+					if (attack._duration > duration::zero())
 					{
 						calculate_count_and_amount(count, amount, attack, _attack, current_vol);
 						apply_point(result, attack, _attack, count, amount, freq, vol, current_vol);
 					}
 
-					if (decay._duration > duration::no_duration())
+					if (decay._duration > duration::zero())
 					{
 						calculate_count_and_amount(count, amount, decay, _decay, current_vol);
 						apply_point(result, decay, _decay, count, amount, freq, vol, current_vol);
 					}
 
-					if (sustain._duration > duration::no_duration())
+					if (sustain._duration > duration::zero())
 					{
 						calculate_count_and_amount(count, amount, sustain, _sustain, current_vol);
 						apply_point(result, sustain, _sustain, count, amount, freq, vol, current_vol);
 					}
 
-					if (release._duration > duration::no_duration())
+					if (release._duration > duration::zero())
 					{
 						release._target._value = 0;
 						calculate_count_and_amount(count, amount, release, release, current_vol);

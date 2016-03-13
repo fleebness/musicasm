@@ -1,7 +1,7 @@
 #if !defined TEMPERAMENT_HPP
 #define TEMPERAMENT_HPP
 
-#include "frequency.hpp"
+#include "_basic_value.hpp"
 
 namespace tvr
 {

@@ -1,9 +1,7 @@
 #if !defined BASE_NOTE_HPP
 #define BASE_NOTE_HPP
 
-#include "amplitude.hpp"
-#include "duration.hpp"
-#include "frequency.hpp"
+#include "_basic_value.hpp"
 #include "port_audio.hpp"
 
 namespace tvr

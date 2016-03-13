@@ -156,13 +156,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="adsr.hpp" />
-    <ClInclude Include="amplitude.hpp" />
     <ClInclude Include="base_note.hpp" />
     <ClInclude Include="console_wait.hpp" />
     <ClInclude Include="device_info.hpp" />
-    <ClInclude Include="duration.hpp" />
     <ClInclude Include="equal_temperament.hpp" />
-    <ClInclude Include="frequency.hpp" />
     <ClInclude Include="host_api.hpp" />
     <ClInclude Include="port_audio.hpp" />
     <ClInclude Include="scale.hpp" />
@@ -171,6 +168,7 @@
     <ClInclude Include="tone_player.hpp" />
     <ClInclude Include="voice.hpp" />
     <ClInclude Include="wave.hpp" />
+    <ClInclude Include="_basic_value.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="musicasm.cpp">
