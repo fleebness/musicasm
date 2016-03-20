@@ -66,6 +66,12 @@
     <ClInclude Include="_basic_value.hpp">
       <Filter>Header Files\musicasm</Filter>
     </ClInclude>
+    <ClInclude Include="sheet.hpp">
+      <Filter>Header Files\musicasm</Filter>
+    </ClInclude>
+    <ClInclude Include="_base_obs.hpp">
+      <Filter>Header Files\musicasm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="musicasm.cpp">

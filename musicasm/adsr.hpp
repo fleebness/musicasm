@@ -1,6 +1,7 @@
 #if !defined ADSR_HPP
 #define ADSR_HPP
 
+#include <memory>
 #include <vector>
 
 #include "_basic_value.hpp"
@@ -14,6 +15,7 @@ namespace tvr
 		{
 		public:
 			typedef std::vector<base_note> notes_t;
+			typedef std::shared_ptr< adsr > ptr;
 
 			struct v_point
 			{

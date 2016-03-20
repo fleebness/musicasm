@@ -163,11 +163,13 @@
     <ClInclude Include="host_api.hpp" />
     <ClInclude Include="port_audio.hpp" />
     <ClInclude Include="scale.hpp" />
+    <ClInclude Include="sheet.hpp" />
     <ClInclude Include="stream.hpp" />
     <ClInclude Include="temperament.hpp" />
     <ClInclude Include="tone_player.hpp" />
     <ClInclude Include="voice.hpp" />
     <ClInclude Include="wave.hpp" />
+    <ClInclude Include="_base_obs.hpp" />
     <ClInclude Include="_basic_value.hpp" />
   </ItemGroup>
   <ItemGroup>

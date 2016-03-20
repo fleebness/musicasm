@@ -36,6 +36,8 @@ namespace tvr
 			typedef std::vector<amplitude_elem> amplitude_collection;
 			/// A convenience type for pointers to _waves.
 			typedef std::shared_ptr<_wave> wave_ptr;
+			/// A convenience type for a shared pointer to a voice.
+			typedef std::shared_ptr<voice> ptr;
 
 			/// The timbre of the note.
 			wave_ptr _tone;
