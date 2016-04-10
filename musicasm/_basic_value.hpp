@@ -18,7 +18,7 @@ namespace tvr
 	namespace ma
 	{
 		/// Represents a tagged double used by the musicasm system to store information.
-		template< int tag >
+		template< int tag, typename type >
 		struct _basic_value
 		{
 			double _value;
@@ -28,7 +28,7 @@ namespace tvr
 			_basic_value(double value) : _value(value) {}
 
 			_basic_value& operator=(const _basic_value& orig) { _value = orig._value; return *this; }
-			_basic_value& operator=(double value) { _value = value; return *this; }
+			_basic_value& operator=(type value) { _value = value; return *this; }
 			_basic_value& operator+=(const _basic_value& orig) { _value += orig._value; return *this; }
 			_basic_value& operator-=(const _basic_value& orig) { _value -= orig._value; return *this; }
 			_basic_value& operator*=(const _basic_value& orig) { _value *= orig._value; return *this; }
@@ -41,11 +41,11 @@ namespace tvr
 			bool operator<=(const _basic_value& orig) const { return !(*this > orig); }
 			bool operator>=(const _basic_value& orig) const { return !(*this < orig); }
 
-			operator double() const { return _value; }
+			operator type() const { return _value; }
 
 			static int get_tag() { return tag; }
-			static const _basic_value& zero() { static _basic_value none(0.0); return none; }
-			static const _basic_value& negative() { static _basic_value neg(-1.0); return neg; }
+			static const _basic_value& zero() { static _basic_value none(0); return none; }
+			static const _basic_value& negative() { static _basic_value neg(-1); return neg; }
 		};
 		
 		const int duration_tag = 0;
@@ -53,42 +53,42 @@ namespace tvr
 		const int frequency_tag = 2;
 
 		/// Represents how long to perform a given frequency or amplitude.
-		typedef _basic_value<duration_tag> duration;
+		typedef _basic_value<duration_tag, double> duration;
 		/// Represents the volume of a wave.
-		typedef _basic_value<amplitude_tag> amplitude;
+		typedef _basic_value<amplitude_tag, double> amplitude;
 		/// Represents the pitch of the wave.
-		typedef _basic_value<frequency_tag> frequency;
+		typedef _basic_value<frequency_tag, double> frequency;
 	}
 }
 
-template< int tag >
-inline tvr::ma::_basic_value<tag> operator-(const tvr::ma::_basic_value<tag>& left, const tvr::ma::_basic_value<tag>& right)
+template< int tag, typename type >
+inline tvr::ma::_basic_value<tag, type> operator-(const tvr::ma::_basic_value<tag, type>& left, const tvr::ma::_basic_value<tag, type>& right)
 {
-	tvr::ma::_basic_value<tag> result = left;
+	tvr::ma::_basic_value<tag, type> result = left;
 	result -= right;
 	return result;
 }
 
-template< int tag >
-inline tvr::ma::_basic_value<tag> operator/(const tvr::ma::_basic_value<tag>& left, const tvr::ma::_basic_value<tag>& right)
+template< int tag, typename type >
+inline tvr::ma::_basic_value<tag, type> operator/(const tvr::ma::_basic_value<tag, type>& left, const tvr::ma::_basic_value<tag, type>& right)
 {
-	tvr::ma::_basic_value<tag> result = left;
+	tvr::ma::_basic_value<tag, type> result = left;
 	result /= right;
 	return result;
 }
 
-template< int tag >
-inline tvr::ma::_basic_value<tag> operator+(const tvr::ma::_basic_value<tag>& left, const tvr::ma::_basic_value<tag>& right)
+template< int tag, typename type >
+inline tvr::ma::_basic_value<tag, type> operator+(const tvr::ma::_basic_value<tag, type>& left, const tvr::ma::_basic_value<tag, type>& right)
 {
-	tvr::ma::_basic_value<tag> result = left;
+	tvr::ma::_basic_value<tag, type> result = left;
 	result += right;
 	return result;
 }
 
-template< int tag >
-inline tvr::ma::_basic_value<tag> operator*(const tvr::ma::_basic_value<tag>& left, const tvr::ma::_basic_value<tag>& right)
+template< int tag, typename type >
+inline tvr::ma::_basic_value<tag, type> operator*(const tvr::ma::_basic_value<tag, type>& left, const tvr::ma::_basic_value<tag, type>& right)
 {
-	tvr::ma::_basic_value<tag> result = left;
+	tvr::ma::_basic_value<tag, type> result = left;
 	result *= right;
 	return result;
 }

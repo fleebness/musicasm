@@ -40,6 +40,7 @@ namespace tvr
 			typedef std::vector< _freq::ptr > frequencies_t;
 			typedef std::vector< ptr > sheets_t;
 			typedef std::map< std::size_t, _dur::ptr > duration_map_t;
+			typedef std::map< std::size_t, _freq::ptr > frequency_map_t;
 			typedef std::map< std::size_t, voice::ptr > voice_map_t;
 			typedef std::map< std::size_t, adsr::ptr > adsr_map_t;
 
@@ -90,6 +91,12 @@ namespace tvr
 		private:
 			duration _beat_dur;
 			duration _max;
+
+			duration_map_t _tempos;
+			duration_map_t _durs;
+			frequency_map_t _pitches;
+			voice_map_t _voices;
+			adsr_map_t _envs;
 		};
 	}
 }

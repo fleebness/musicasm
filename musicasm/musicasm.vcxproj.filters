@@ -72,6 +72,9 @@
     <ClInclude Include="_base_obs.hpp">
       <Filter>Header Files\musicasm</Filter>
     </ClInclude>
+    <ClInclude Include="beat.hpp">
+      <Filter>Header Files\musicasm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="musicasm.cpp">
