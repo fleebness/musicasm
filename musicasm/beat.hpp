@@ -103,24 +103,29 @@ namespace tvr
 			}
 
 			/// Sub-divides a pulse/beat.
+			/// \param div The specific division to be sub-divided
+			/// \param b The sub-division for the division.
 			void set_division_to_beat(std::size_t div, const beat& b)
 			{
 				_subdivs[div] = b;
 			}
 			
 			/// Clears a pulse/beat's subdivision.
+			/// \paam div The division from which to remove the beat.
 			void clear_division_from_beat(std::size_t div)
 			{
 				_subdivs.erase(div);
 			}
 
 			/// Indicates that the duration of the division of the beat is tied to the next duration.
+			/// \param div The division to tie to the next duration.
 			void set_tie(std::size_t div)
 			{
 				_ties.insert(div);
 			}
 
 			/// Removes a tie from the named division.
+			/// \param div The division whose tie should be erased.
 			void erase_tie(std::size_t div)
 			{
 				_ties.erase(div);
@@ -148,6 +153,7 @@ namespace tvr
 			}
 
 			/// Adds `count` to either division or beat count, depending upon context.
+			/// \param count The amount to add to the division or beat count.
 			beat operator+(std::size_t count)
 			{
 				beat result(*this);
@@ -159,6 +165,7 @@ namespace tvr
 			}
 
 			/// Subtracts `count` safely from either division or beat count, depending upon context.
+			/// \param count The amount t oremove from the division or beat count.
 			beat operator-(std::size_t count)
 			{
 				beat result(*this);

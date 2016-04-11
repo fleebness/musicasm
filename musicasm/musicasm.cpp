@@ -120,7 +120,7 @@ int main()
 			point._target = 0.0;
 			env.set_release(point);
 
-			typedef std::vector<std::size_t> intervals;
+			typedef std::vector<int> intervals;
 			intervals notes;
 			notes.push_back(2);
 			notes.push_back(1);
@@ -174,7 +174,7 @@ int main()
 				&& int_iter != notes.end()
 				)
 			{
-				env(voice1, base_note(scale.get_freq(*int_iter, 0), vol, *dur_iter));
+				env(voice1, base_note( scale.get_freq(*int_iter, 0), vol, *dur_iter));
 				++dur_iter;
 				++int_iter;
 			}
