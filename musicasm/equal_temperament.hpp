@@ -93,21 +93,23 @@ namespace tvr
 		};
 
 		template<std::size_t freq, std::size_t num, std::size_t division>
-		struct get_temperament
+		struct get_equal_temperament:public _get_temperament
 		{
-			equal_temperament operator()()
+			virtual _temperament_ptr operator()()
 			{
 				return get_temper();
 			}
 
-			static equal_temperament get_temper()
+			static _temperament_ptr get_temper()
 			{
-				return equal_temperament(freq, num, division);
+				_temperament_ptr result;
+				result.reset(new equal_temperament(freq, num, division));
+				return result;
 			}
 		};
 
-		typedef get_temperament<440, 49, 12> a440_12_TET;
-		typedef get_temperament<432, 49, 12> a432_12_TET;
+		typedef get_equal_temperament<440, 49, 12> a440_12_TET_p;
+		typedef get_equal_temperament<432, 49, 12> a432_12_TET_p;
 	}
 }
 

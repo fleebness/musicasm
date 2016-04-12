@@ -44,12 +44,12 @@ namespace tvr
 			class note
 			{
 			public:
-				note(equal_temperament& tuning):_tuning(tuning), _key(49) {}
+				note(_temperament::_ptr tuning):_tuning(tuning), _key(49) {}
 				note(const note& orig): _tuning(orig._tuning)
 				{
 					*this = orig;
 				}
-				note(std::size_t key, equal_temperament& tuning): _tuning(tuning), _key(key)
+				note(std::size_t key, _temperament::_ptr tuning): _tuning(tuning), _key(key)
 				{}
 				~note(){}
 
@@ -61,18 +61,18 @@ namespace tvr
 
 				operator frequency() const
 				{
-					return _tuning.get_freq(_key);
+					return _tuning->get_freq(_key);
 				}
 			private:
-				equal_temperament& _tuning;
+				_temperament::_ptr _tuning;
 				std::size_t _key;
 			};
 			
-			template< typename get_temperament >
+			template< typename get_temperament, std::size_t diatonic_count >
 			class scale
 			{
 			public:
-				scale(std::size_t key, const size_t(&modal_scale)[7] = ionian_mode):
+				scale(std::size_t key, const size_t(&modal_scale)[diatonic_count] = ionian_mode):
 					_temper(get_temperament::get_temper()),
 					_mode(modal_scale),
 					_key(key)
@@ -88,17 +88,17 @@ namespace tvr
 
 				note get_note(int interval, int octave = 0, bool flat = false, bool sharp = false)
 				{
-					octave += interval / 7;
+					octave += interval / diatonic_count;
 					if (interval < 0)
 					{
-						interval = 7 + interval;
+						interval = diatonic_count + interval;
 						--octave;
 					}
-					if (interval > 6)
+					if (interval > diatonic_count - 1)
 					{
-						interval %= 7;
+						interval %= diatonic_count;
 					}
-					std::size_t mod = _key + (_temper.get_octave_division() * octave);
+					std::size_t mod = _key + (_temper->get_octave_division() * octave);
 					mod += _mode[interval];
 					if (sharp)
 					{
@@ -119,13 +119,13 @@ namespace tvr
 				}
 
 			private:
-				equal_temperament _temper;
-				const size_t(&_mode)[7];
+				_temperament::_ptr _temper;
+				const size_t(&_mode)[diatonic_count];
 				std::size_t _key;
 			};
 
-			typedef scale<a440_12_TET> concert_scale;
-			typedef scale<a432_12_TET> scale_432;
+			typedef scale<a440_12_TET_p, 7> concert_scale;
+			typedef scale<a432_12_TET_p, 7> scale_432;
 		}
 	}
 }
