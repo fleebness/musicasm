@@ -2,6 +2,7 @@
 #define SCALE_HPP
 
 #include "equal_temperament.hpp"
+#include "just_temperament.hpp"
 
 namespace tvr
 {
@@ -56,6 +57,12 @@ namespace tvr
 				note& operator=(const note& orig)
 				{
 					_key = orig._key;
+					return *this;
+				}
+
+				note& operator=(_temperament::_ptr tuning)
+				{
+					_tuning = tuning;
 					return *this;
 				}
 
@@ -126,6 +133,8 @@ namespace tvr
 
 			typedef scale<a440_12_TET_p, 7> concert_scale;
 			typedef scale<a432_12_TET_p, 7> scale_432;
+			typedef scale<pyth_a440_49_t, 7> pythagorian_a_scale;
+			typedef scale<five_lim_a440_49_t, 7> five_limit_a_scale;
 		}
 	}
 }

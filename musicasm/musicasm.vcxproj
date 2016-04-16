@@ -162,7 +162,9 @@
     <ClInclude Include="device_info.hpp" />
     <ClInclude Include="equal_temperament.hpp" />
     <ClInclude Include="host_api.hpp" />
+    <ClInclude Include="just_temperament.hpp" />
     <ClInclude Include="port_audio.hpp" />
+    <ClInclude Include="fraction.hpp" />
     <ClInclude Include="scale.hpp" />
     <ClInclude Include="sheet.hpp" />
     <ClInclude Include="stream.hpp" />

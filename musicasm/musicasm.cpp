@@ -103,7 +103,9 @@ int main()
 
 			tone_player player(def_host, output_device, outParam);
 			player.set_vol(static_cast<float>(0.5));
-			western::scale_432 scale(static_cast<std::size_t>(49));
+			western::concert_scale scale_e(static_cast<std::size_t>(49));
+			western::five_limit_a_scale scale(static_cast<std::size_t>(49));
+			western::pythagorian_a_scale scale_p(static_cast<std::size_t>(49));
 
 			adsr env;
 			adsr::v_point point;
@@ -120,34 +122,13 @@ int main()
 			point._target = 0.0;
 			env.set_release(point);
 
+			std::size_t moo[] = { 2,1,0,1,2,2,2,1,1,1,2,4,4,2,1,0,1,2,2,2,2,1,1,2,1,0, -1 };
 			typedef std::vector<int> intervals;
 			intervals notes;
-			notes.push_back(2);
-			notes.push_back(1);
-			notes.push_back(0);
-			notes.push_back(1);
-			notes.push_back(2);
-			notes.push_back(2);
-			notes.push_back(2);
-			notes.push_back(1);
-			notes.push_back(1);
-			notes.push_back(1);
-			notes.push_back(2);
-			notes.push_back(4);
-			notes.push_back(4);
-			notes.push_back(2);
-			notes.push_back(1);
-			notes.push_back(0);
-			notes.push_back(1);
-			notes.push_back(2);
-			notes.push_back(2);
-			notes.push_back(2);
-			notes.push_back(2);
-			notes.push_back(1);
-			notes.push_back(1);
-			notes.push_back(2);
-			notes.push_back(1);
-			notes.push_back(0);
+			for (unsigned int i = 0; moo[i] != -1; ++i)
+			{
+				notes.push_back(moo[i]);
+			}
 
 			beat meter(26); // 32 pulses in Merrily We Stroll Along.
 			beat whole(4, 1);  // It has a whole note.
@@ -159,14 +140,17 @@ int main()
 			typedef std::vector<duration> durations;
 			durations durs;
 			meter.get_durations(durs, 0.5);
-			print_durations(durs);
+			// print_durations(durs);
 
 			voice voice1;
-			// voice1._tone.reset(new sine_wave());
+			voice voice2;
+			voice voice3;
 			voice1._tone.reset(new sawtooth_wave());
-			// voice1._tone.reset(new pulse_wave());
+			voice2._tone.reset(new sawtooth_wave());
+			voice3._tone.reset(new sawtooth_wave());
 
 			amplitude vol = 0.15;
+			amplitude silence = 0.0;
 
 			durations::iterator dur_iter = durs.begin();
 			intervals::iterator int_iter = notes.begin();
@@ -175,11 +159,51 @@ int main()
 				)
 			{
 				env(voice1, base_note( scale.get_freq(*int_iter, 0), vol, *dur_iter));
+				env(voice2, base_note(0, silence, *dur_iter));
+				env(voice3, base_note(0, silence, *dur_iter));
+				++dur_iter;
+				++int_iter;
+			}
+			dur_iter = durs.begin();
+			int_iter = notes.begin();
+			while (dur_iter != durs.end()
+				&& int_iter != notes.end()
+				)
+			{
+				env(voice1, base_note(0, silence, *dur_iter));
+				env(voice2, base_note(scale_e.get_freq(*int_iter, 0), vol, *dur_iter));
+				env(voice3, base_note(0, silence, *dur_iter));
+				++dur_iter;
+				++int_iter;
+			}
+			dur_iter = durs.begin();
+			int_iter = notes.begin();
+			while (dur_iter != durs.end()
+				&& int_iter != notes.end()
+				)
+			{
+				env(voice1, base_note(0, silence, *dur_iter));
+				env(voice2, base_note(0, silence, *dur_iter));
+				env(voice3, base_note(scale_p.get_freq(*int_iter, 0), vol, *dur_iter));
+				++dur_iter;
+				++int_iter;
+			}
+			dur_iter = durs.begin();
+			int_iter = notes.begin();
+			while (dur_iter != durs.end()
+				&& int_iter != notes.end()
+				)
+			{
+				env(voice1, base_note(scale.get_freq(*int_iter, 0), vol, *dur_iter));
+				env(voice2, base_note(scale_e.get_freq(*int_iter, 0), vol, *dur_iter));
+				env(voice3, base_note(scale_p.get_freq(*int_iter, 0), vol, *dur_iter));
 				++dur_iter;
 				++int_iter;
 			}
 
 			player.add_voice(voice1);
+			player.add_voice(voice2);
+			player.add_voice(voice3);
 			player.set_finished_fn(&set_finished);
 
 			player.play();
