@@ -111,7 +111,7 @@ namespace tvr
 			}
 			
 			/// Clears a pulse/beat's subdivision.
-			/// \paam div The division from which to remove the beat.
+			/// \param div The division from which to remove the beat.
 			void clear_division_from_beat(std::size_t div)
 			{
 				_subdivs.erase(div);
@@ -213,6 +213,8 @@ namespace tvr
 				std::size_t count = _beat_count;
 				if (_divisions != 0)
 				{
+					// When _divisions != 0, we are dividing our total playtime
+					// by that number.
 					divs = tempo * _beat_count / _divisions;
 					count = _divisions;
 				}
@@ -222,6 +224,11 @@ namespace tvr
 					if (found != _subdivs.end())
 					{
 						result = found->second.get_durations(col, divs, result);
+						if (found->second._beat_count > 1)
+						{
+							// Need to increment 'i' past the count of beats.
+							i += (found->second._beat_count - 1);
+						}
 					}
 					else
 					{

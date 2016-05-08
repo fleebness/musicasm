@@ -215,6 +215,37 @@ namespace tvr
 		private:
 		};
 
+		struct get_just_temperament_around_freq : public _get_temperament
+		{
+			template<typename RatioArray>
+			get_just_temperament_around_freq(const RatioArray& ratios, frequency ref, std::size_t ref_num):
+				_ref(ref),
+				_ref_num(ref_num)
+			{
+				_temperament.reset(new just_temperament(ratios, _ref, _ref_num));
+			}
+
+			virtual _temperament_ptr operator()()
+			{
+				return _temperament;
+			}
+
+			static get_just_temperament_around_freq five_limit_factory(frequency ref, std::size_t ref_num)
+			{
+				return get_just_temperament_around_freq(five_limit_tuning, ref, ref_num);
+			}
+
+			static get_just_temperament_around_freq pythagorean_factory(frequency ref, std::size_t ref_num)
+			{
+				return get_just_temperament_around_freq(pythagorean_tuning, ref, ref_num);
+			}
+
+		private:
+			frequency _ref;
+			std::size_t _ref_num;
+			_temperament_ptr _temperament;
+		};
+
 		typedef get_pythagorean_temperment<440, 49> pyth_a440_49_t;
 		typedef get_five_limit_temperment<440, 49> five_lim_a440_49_t;
 	}

@@ -58,6 +58,16 @@ namespace tvr
 		typedef _basic_value<amplitude_tag, double> amplitude;
 		/// Represents the pitch of the wave.
 		typedef _basic_value<frequency_tag, double> frequency;
+
+		template<typename Type>
+		struct _music_dur
+		{
+			Type _val;
+			duration _length;
+		};
+
+		typedef _music_dur<amplitude> amplitude_dur;
+		typedef _music_dur<frequency> frequency_dur;
 	}
 }
 

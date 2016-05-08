@@ -15,7 +15,7 @@ namespace tvr
 		{
 		public:
 			typedef std::vector<base_note> notes_t;
-			typedef std::shared_ptr< adsr > ptr;
+			typedef std::shared_ptr<adsr> ptr;
 
 			struct v_point
 			{
@@ -96,10 +96,10 @@ namespace tvr
 
 			void operator()(voice& result, const base_note& note) const
 			{
-				operator()(result, note._freq, note._vol, note._dur);
+				operator()(result, note._vol, note._dur, note._freq);
 			}
 
-			void operator()(voice& result, frequency freq, amplitude vol, duration dur) const
+			void operator()(voice& result, amplitude vol, duration dur, frequency freq) const
 			{
 				// Fun stuff!
 				// Add base_notes to results for:
@@ -119,76 +119,149 @@ namespace tvr
 					v_point decay = _decay;
 					v_point sustain = _sustain;
 					v_point release = _release;
-					if (_min_dur > dur)
+					calculate_env(attack, decay, sustain, release, _min_dur, dur);
+					apply_env(result, attack, decay, sustain, release, vol, freq);
+				}
+			}
+
+			template<typename Coll>
+			void get_durations(Coll& result, amplitude vol, duration dur) const
+			{
+				v_point attack = _attack;
+				v_point decay = _decay;
+				v_point sustain = _sustain;
+				v_point release = _release;
+				calculate_env(attack, decay, sustain, release, _min_dur, dur);
+				get_env_durations(result, attack, decay, sustain, release, vol);
+			}
+
+		private:
+			static void calculate_env( v_point& attack,
+				v_point& decay,
+				v_point& sustain,
+				v_point& release,
+				duration minimum,
+				duration dur)
+			{
+				if (minimum > dur)
+				{
+					// We have to trim durations.
+					duration leftover = minimum - dur;
+					sustain._duration = 0; // We don't have enough for minimum, ergo, can't do a sustain.
+					decay._duration -= leftover;
+					if (decay._duration < duration::zero())
 					{
-						// We have to trim durations.
-						duration leftover = _min_dur - dur;
-						sustain._duration = 0; // We don't have enough for minimum, ergo, can't do a sustain.
-						decay._duration -= leftover;
-						if (decay._duration < duration::zero())
+						leftover = decay._duration * duration::negative();
+						decay._duration = duration::zero();
+					}
+					if (leftover > duration::zero())
+					{
+						attack._duration -= leftover;
+						if (attack._duration < duration::zero())
 						{
-							leftover = decay._duration * duration::negative();
-							decay._duration = duration::zero();
-						}
-						if (leftover > duration::zero())
-						{
-							attack._duration -= leftover;
-							if (attack._duration < duration::zero())
+							leftover = attack._duration * duration::negative();
+							attack._duration = duration::zero();
+							if (leftover > duration::zero())
 							{
-								leftover = attack._duration * duration::negative();
-								attack._duration = duration::zero();
-								if (leftover > duration::zero())
+								release._duration -= leftover;
+								if (release._duration < duration::zero())
 								{
-									release._duration -= leftover;
-									if (release._duration < duration::zero())
-									{
-										// We should never, ever, get here.
-										// If we do, we have a miscalculation somewhere.
-										release._duration = duration::zero();
-									}
+									// We should never, ever, get here.
+									// If we do, we have a miscalculation somewhere.
+									release._duration = duration::zero();
 								}
 							}
 						}
 					}
-					else
-					{
-						duration leftover = dur - _min_dur;
-						sustain._duration = leftover;
-					}
+				}
+				else
+				{
+					duration leftover = dur - minimum;
+					sustain._duration = leftover;
+				}
+				release._target._value = 0;
+			}
 
-					// By now, we should have everything we need.
-					amplitude current_vol = 0.0;
-					double count, amount;
-					count = amount = 0.0;
-					if (attack._duration > duration::zero())
-					{
-						calculate_count_and_amount(count, amount, attack, _attack, current_vol);
-						apply_point(result, attack, _attack, count, amount, freq, vol, current_vol);
-					}
+			template<typename Coll>
+			void get_env_durations(Coll& result,
+				const v_point& attack,
+				const v_point& decay,
+				const v_point& sustain,
+				const v_point& release,
+				amplitude vol) const
+			{
+				amplitude current_vol = 0.0;
+				double count, amount;
+				count = amount = 0.0;
+				if (attack._duration > duration::zero())
+				{
+					calculate_count_and_amount(count, amount, attack, _attack, current_vol);
+					apply_point_to_coll(result, attack, _attack, count, amount, vol, current_vol);
+				}
 
-					if (decay._duration > duration::zero())
-					{
-						calculate_count_and_amount(count, amount, decay, _decay, current_vol);
-						apply_point(result, decay, _decay, count, amount, freq, vol, current_vol);
-					}
+				if (decay._duration > duration::zero())
+				{
+					calculate_count_and_amount(count, amount, decay, _decay, current_vol);
+					apply_point_to_coll(result, decay, _decay, count, amount, vol, current_vol);
+				}
 
-					if (sustain._duration > duration::zero())
-					{
-						calculate_count_and_amount(count, amount, sustain, _sustain, current_vol);
-						apply_point(result, sustain, _sustain, count, amount, freq, vol, current_vol);
-					}
+				if (sustain._duration > duration::zero())
+				{
+					calculate_count_and_amount(count, amount, sustain, _sustain, current_vol);
+					apply_point_to_coll(result, sustain, _sustain, count, amount, vol, current_vol);
+				}
 
-					if (release._duration > duration::zero())
-					{
-						release._target._value = 0;
-						calculate_count_and_amount(count, amount, release, release, current_vol);
-						apply_point(result, release, release, count, amount, freq, vol, current_vol);
-					}
+				if (release._duration > duration::zero())
+				{
+					calculate_count_and_amount(count, amount, release, release, current_vol);
+					apply_point_to_coll(result, release, release, count, amount, vol, current_vol);
 				}
 			}
 
-		private:
-			static void apply_point(voice& result, const v_point& calculated, const v_point& original, double count, double amount, frequency freq, amplitude vol, amplitude& current_vol)
+			void apply_env(voice& result,
+				const v_point& attack,
+				const v_point& decay,
+				const v_point& sustain,
+				const v_point& release,
+				amplitude vol,
+				frequency freq) const
+			{
+				amplitude current_vol = 0.0;
+				double count, amount;
+				count = amount = 0.0;
+				if (attack._duration > duration::zero())
+				{
+					calculate_count_and_amount(count, amount, attack, _attack, current_vol);
+					apply_point(result, attack, _attack, count, amount, vol, current_vol, freq);
+				}
+
+				if (decay._duration > duration::zero())
+				{
+					calculate_count_and_amount(count, amount, decay, _decay, current_vol);
+					apply_point(result, decay, _decay, count, amount, vol, current_vol, freq);
+				}
+
+				if (sustain._duration > duration::zero())
+				{
+					calculate_count_and_amount(count, amount, sustain, _sustain, current_vol);
+					apply_point(result, sustain, _sustain, count, amount, vol, current_vol, freq);
+				}
+
+				if (release._duration > duration::zero())
+				{
+					calculate_count_and_amount(count, amount, release, release, current_vol);
+					apply_point(result, release, release, count, amount, vol, current_vol, freq);
+				}
+			}
+
+			static void apply_point(voice& result,
+				const v_point& calculated,
+				const v_point& original,
+				double count,
+				double amount,
+				amplitude vol,
+				amplitude& current_vol,
+				frequency freq)
 			{
 				for (duration i = 0.0; i < calculated._duration; i += count)
 				{
@@ -197,7 +270,52 @@ namespace tvr
 				}
 			}
 
-			static void calculate_count_and_amount(double& count, double& amount, const v_point& item, const v_point& original, amplitude& current_vol)
+			static void apply_point(voice& result,
+				const v_point& calculated,
+				const v_point& original,
+				double count,
+				double amount,
+				amplitude vol,
+				amplitude& current_vol)
+			{
+				for (duration i = 0.0; i < calculated._duration; i += count)
+				{
+					current_vol._value += amount;
+					result.add_vol(current_vol._value * vol._value, count);
+				}
+			}
+
+			template<typename Coll>
+			static void apply_point_to_coll(Coll& result,
+				const v_point& calculated,
+				const v_point& original,
+				double count,
+				double amount,
+				amplitude vol,
+				amplitude& current_vol)
+			{
+				// doubles are super-terrible at this.  So, let's use ints!
+				unsigned int max = static_cast<unsigned int>(calculated._duration._value * 100);
+				unsigned int iter = static_cast<unsigned int>(count * 100);
+				for (unsigned int i = 0; i < max; i += iter)
+				{
+					current_vol._value += amount;
+					amplitude_dur info;
+					info._val = current_vol._value;
+					info._length = count;
+					if (info._val._value < 0.0)
+					{
+						info._val._value = 0.0;
+					}
+					result.insert(result.end(), info);
+				}
+			}
+
+			static void calculate_count_and_amount(double& count,
+				double& amount,
+				const v_point& item,
+				const v_point& original,
+				amplitude& current_vol)
 			{
 				count = 0;
 				amount = 0;
